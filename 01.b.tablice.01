@@ -1,0 +1,183 @@
+--------------------------------------------------------
+--  DDL for Table CATEGORIES
+--------------------------------------------------------
+
+  CREATE TABLE "CATEGORIES" 
+   (	"CATEGORY_ID" NUMBER(10,0), 
+	"CATEGORY_NAME" VARCHAR2(100 BYTE), 
+	"DESCRIPTION" VARCHAR2(255 BYTE)
+   ) ;
+--------------------------------------------------------
+--  DDL for Table CUSTOMERS
+--------------------------------------------------------
+
+  CREATE TABLE "CUSTOMERS" 
+   (	"CUSTOMER_ID" NUMBER(10,0), 
+	"FIRST_NAME" VARCHAR2(50 BYTE), 
+	"LAST_NAME" VARCHAR2(50 BYTE), 
+	"EMAIL" VARCHAR2(100 BYTE), 
+	"PHONE" VARCHAR2(20 BYTE), 
+	"ADDRESS" VARCHAR2(255 BYTE)
+   ) ;
+--------------------------------------------------------
+--  DDL for Table ORDER_ITEMS
+--------------------------------------------------------
+
+  CREATE TABLE "ORDER_ITEMS" 
+   (	"ORDER_ITEM_ID" NUMBER(10,0), 
+	"ORDER_ID" NUMBER(10,0), 
+	"PRODUCT_ID" NUMBER(10,0), 
+	"QUANTITY" NUMBER(10,0), 
+	"UNIT_PRICE" NUMBER(10,2)
+   ) ;
+--------------------------------------------------------
+--  DDL for Table ORDERS
+--------------------------------------------------------
+
+  CREATE TABLE "ORDERS" 
+   (	"ORDER_ID" NUMBER(10,0), 
+	"CUSTOMER_ID" NUMBER(10,0), 
+	"ORDER_DATE" DATE DEFAULT SYSDATE, 
+	"TOTAL_AMOUNT" NUMBER(10,2), 
+	"STATUS" VARCHAR2(20 BYTE) DEFAULT 'PENDING'
+   ) ;
+--------------------------------------------------------
+--  DDL for Table PRODUCTS
+--------------------------------------------------------
+
+  CREATE TABLE "PRODUCTS" 
+   (	"PRODUCT_ID" NUMBER(10,0), 
+	"PRODUCT_NAME" VARCHAR2(100 BYTE), 
+	"PRICE" NUMBER(10,2), 
+	"STOCK_QUANTITY" NUMBER(10,0), 
+	"CATEGORY_ID" NUMBER(10,0)
+   ) ;
+--------------------------------------------------------
+--  DDL for Index SYS_C008742
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "SYS_C008742" ON "CATEGORIES" ("CATEGORY_ID") ;
+--------------------------------------------------------
+--  DDL for Index SYS_C008743
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "SYS_C008743" ON "CATEGORIES" ("CATEGORY_NAME")  ;
+--------------------------------------------------------
+--  DDL for Index SYS_C008753
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "SYS_C008753" ON "CUSTOMERS" ("CUSTOMER_ID") ;
+--------------------------------------------------------
+--  DDL for Index SYS_C008754
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "SYS_C008754" ON "CUSTOMERS" ("EMAIL") ;
+--------------------------------------------------------
+--  DDL for Index SYS_C008767
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "SYS_C008767" ON "ORDER_ITEMS" ("ORDER_ITEM_ID") ;
+--------------------------------------------------------
+--  DDL for Index SYS_C008760
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "SYS_C008760" ON "ORDERS" ("ORDER_ID") ;
+--------------------------------------------------------
+--  DDL for Index SYS_C008749
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "SYS_C008749" ON "PRODUCTS" ("PRODUCT_ID") ;
+--------------------------------------------------------
+--  Constraints for Table CATEGORIES
+--------------------------------------------------------
+
+  ALTER TABLE "CATEGORIES" MODIFY ("CATEGORY_NAME" NOT NULL ENABLE);
+  ALTER TABLE "CATEGORIES" ADD PRIMARY KEY ("CATEGORY_ID");
+  ALTER TABLE "CATEGORIES" ADD UNIQUE ("CATEGORY_NAME");
+--------------------------------------------------------
+--  Constraints for Table CUSTOMERS
+--------------------------------------------------------
+
+  ALTER TABLE "CUSTOMERS" MODIFY ("FIRST_NAME" NOT NULL ENABLE);
+  ALTER TABLE "CUSTOMERS" MODIFY ("LAST_NAME" NOT NULL ENABLE);
+  ALTER TABLE "CUSTOMERS" ADD PRIMARY KEY ("CUSTOMER_ID");
+  ALTER TABLE "CUSTOMERS" ADD UNIQUE ("EMAIL");
+--------------------------------------------------------
+--  Constraints for Table ORDER_ITEMS
+--------------------------------------------------------
+
+  ALTER TABLE "ORDER_ITEMS" MODIFY ("ORDER_ID" NOT NULL ENABLE);
+  ALTER TABLE "ORDER_ITEMS" MODIFY ("PRODUCT_ID" NOT NULL ENABLE);
+  ALTER TABLE "ORDER_ITEMS" MODIFY ("QUANTITY" NOT NULL ENABLE);
+  ALTER TABLE "ORDER_ITEMS" MODIFY ("UNIT_PRICE" NOT NULL ENABLE);
+  ALTER TABLE "ORDER_ITEMS" ADD CONSTRAINT "CHK_QUANTITY" CHECK (quantity > 0) ENABLE;
+  ALTER TABLE "ORDER_ITEMS" ADD PRIMARY KEY ("ORDER_ITEM_ID");
+--------------------------------------------------------
+--  Constraints for Table ORDERS
+--------------------------------------------------------
+
+  ALTER TABLE "ORDERS" MODIFY ("CUSTOMER_ID" NOT NULL ENABLE);
+  ALTER TABLE "ORDERS" MODIFY ("ORDER_DATE" NOT NULL ENABLE);
+  ALTER TABLE "ORDERS" MODIFY ("TOTAL_AMOUNT" NOT NULL ENABLE);
+  ALTER TABLE "ORDERS" MODIFY ("STATUS" NOT NULL ENABLE);
+  ALTER TABLE "ORDERS" ADD CONSTRAINT "CHK_TOTAL_AMOUNT" CHECK (total_amount >= 0) ENABLE;
+  ALTER TABLE "ORDERS" ADD PRIMARY KEY ("ORDER_ID");
+--------------------------------------------------------
+--  Constraints for Table PRODUCTS
+--------------------------------------------------------
+
+  ALTER TABLE "PRODUCTS" MODIFY ("PRODUCT_NAME" NOT NULL ENABLE);
+  ALTER TABLE "PRODUCTS" MODIFY ("PRICE" NOT NULL ENABLE);
+  ALTER TABLE "PRODUCTS" MODIFY ("STOCK_QUANTITY" NOT NULL ENABLE);
+  ALTER TABLE "PRODUCTS" ADD CONSTRAINT "CHK_PRICE" CHECK (price >= 0) ENABLE;
+  ALTER TABLE "PRODUCTS" ADD CONSTRAINT "CHK_STOCK" CHECK (stock_quantity >= 0) ENABLE;
+  ALTER TABLE "PRODUCTS" ADD PRIMARY KEY ("PRODUCT_ID");
+--------------------------------------------------------
+--  Ref Constraints for Table ORDER_ITEMS
+--------------------------------------------------------
+
+  ALTER TABLE "ORDER_ITEMS" ADD CONSTRAINT "FK_ORDER" FOREIGN KEY ("ORDER_ID")
+	  REFERENCES "ORDERS" ("ORDER_ID") ENABLE;
+  ALTER TABLE "ORDER_ITEMS" ADD CONSTRAINT "FK_PRODUCT" FOREIGN KEY ("PRODUCT_ID")
+	  REFERENCES "PRODUCTS" ("PRODUCT_ID") ENABLE;
+--------------------------------------------------------
+--  Ref Constraints for Table ORDERS
+--------------------------------------------------------
+
+  ALTER TABLE "ORDERS" ADD CONSTRAINT "FK_CUSTOMER" FOREIGN KEY ("CUSTOMER_ID")
+	  REFERENCES "CUSTOMERS" ("CUSTOMER_ID") ENABLE;
+--------------------------------------------------------
+--  Ref Constraints for Table PRODUCTS
+--------------------------------------------------------
+
+  ALTER TABLE "PRODUCTS" ADD CONSTRAINT "FK_CATEGORY" FOREIGN KEY ("CATEGORY_ID")
+	  REFERENCES "CATEGORIES" ("CATEGORY_ID") ENABLE;
+
+-------------------------------------------------------
+--  DDL for Table SUPPLIERS
+--------------------------------------------------------
+
+  CREATE TABLE "SUPPLIERS" 
+   (	"supplier_id" NUMBER(10,0) primary key, 
+	"supplier_name" VARCHAR2(150 BYTE), 
+	"contact_person" VARCHAR2(100 BYTE),
+	"email" VARCHAR2(100 BYTE), 
+	"phone" VARCHAR2(20 BYTE),
+	"address" VARCHAR2(255 BYTE), 
+	"country" VARCHAR2(50 BYTE),
+	"is_active" NUMBER(1) default(1)
+   ) ;
+
+-------------------------------------------------------
+--  DDL for Table PRODUCT_REVIEWS
+--------------------------------------------------------
+
+  CREATE TABLE "PRODUCT_REVIEWS" 
+   (	"review_id" NUMBER(10,0) primary key, 
+	"product_id" NUMBER(10,0) not null
+	"customer_id" NUMBER(10,0) not null
+	"rating" NUMBER(10,0) not null
+	"comment" CLOB
+	"review_date" Date Sysdate
+	"is_verified" NUMBER(1) default(0)
+   ) ;
