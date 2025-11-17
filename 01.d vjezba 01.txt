@@ -1,0 +1,42 @@
+-------------------------------------------------------
+--  DDL for Table SUPPLIERS
+--------------------------------------------------------
+
+  CREATE TABLE "SUPPLIERS" 
+   (	"supplier_id" NUMBER(10,0) primary key, 
+	"supplier_name" VARCHAR2(150 BYTE), 
+	"contact_person" VARCHAR2(100 BYTE),
+	"email" VARCHAR2(100 BYTE), 
+	"phone" VARCHAR2(20 BYTE),
+	"address" VARCHAR2(255 BYTE), 
+	"country" VARCHAR2(50 BYTE),
+	"is_active" NUMBER(1) default(1)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+
+-------------------------------------------------------
+--  DDL for Table PRODUCT_REVIEWS
+--------------------------------------------------------
+
+  CREATE TABLE "PRODUCT_REVIEWS" 
+   (	"review_id" NUMBER(10,0) primary key, 
+	"product_id" NUMBER(10,0) not null
+	"customer_id" NUMBER(10,0) not null
+	"rating" NUMBER(10,0) not null
+	"comment" CLOB
+	"review_date" Date Sysdate
+	"is_verified" NUMBER(1) default(0)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+
+
